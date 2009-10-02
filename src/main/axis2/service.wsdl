@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- xmlns:wsdl2="http://schemas.xmlsoap.org/wsdl" -->
+<wsdl2:description xmlns="http://www.w3.org/ns/wsdl" xmlns:tns="http://www.biosimilarity.com/BNFService" xmlns:wsdl2="http://www.w3.org/ns/wsdl" xmlns:wrpc="http://www.w3.org/ns/wsdl/rpc" xmlns:whttp="http://www.w3.org/ns/wsdl/http" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsdlx="http://www.w3.org/ns/wsdl-extensions" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:axis2="http://www.biosimilarity.com/BNFService" targetNamespace="http://www.biosimilarity.com/BNFService">
+    <wsdl2:types>
+      <!-- targetNamespace="http://www.biosimilarity.com/BNFService?xsd" -->
+      <xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://www.biosimilarity.com/BNFService">
+            <xs:complexType name="addNewBNFResourceType">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:string" />
+                    <xs:element name="name" type="xs:string" />
+                    <xs:element name="src" type="xs:string" />
+                    <xs:element name="url" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="addNewBNFResource" type="tns:addNewBNFResourceType" />
+            <xs:complexType name="addNewBNFResourceResponseType">
+                <xs:sequence>
+                    <xs:element name="return" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="addNewBNFResourceResponse" type="tns:addNewBNFResourceResponseType" />
+        </xs:schema>
+    </wsdl2:types>
+    <wsdl2:interface name="ManageBNFResources">
+        <wsdl2:operation 
+            name="addNewBNFResource" 
+            style="http://www.w3.org/ns/wsdl/style/rpc http://www.w3.org/ns/wsdl/style/multipart" 
+            wrpc:signature="id #in name #in src #in url #in return #return " 
+            pattern="http://www.w3.org/ns/wsdl/in-out">
+            <wsdl2:documentation>&lt;div>Add a new customer into the system&lt;/div></wsdl2:documentation>
+            <wsdl2:input 
+                element="tns:addNewBNFResource" 
+                wsaw:Action="http://www.biosimilarity.com/BNFService/ServiceInterface/addNewBNFResourceRequest" />
+            <wsdl2:output 
+                element="tns:addNewBNFResourceResponse" 
+                wsaw:Action="http://www.biosimilarity.com/BNFService/ServiceInterface/addNewBNFResourceResponse" />
+        </wsdl2:operation>
+        <!-- operation name="getBNFResource"></operation -->
+        <!-- operation name="getParser"></operation -->
+        <!-- operation name="getBNFResources"></operation -->
+    </wsdl2:interface>
+    <wsdl2:binding name="BNFService-HttpBinding"
+        interface="tns:ManageBNFResources"
+        type="http://www.w3.org/ns/wsdl/http">
+        <wsdl2:operation
+            ref="tns:addNewBNFResource"
+            whttp:method="POST"
+            whttp:location="BNFResources" />
+    </wsdl2:binding>
+    <wsdl2:service name="BNFService" interface="tns:ManageBNFResources">
+        <wsdl2:endpoint name="SecureHTTPEndpoint"
+                        binding="tns:BNFService-HttpBinding"
+                        address="https://biosimilarity.com/services/bnfsrv/BNFService.SecureHTTPEndpoint/"/>
+        <wsdl2:endpoint name="HTTPEndpoint"
+            binding="tns:BNFService-HttpBinding"
+            address="https://biosimilarity.com/services/bnfsrv/BNFService.HTTPEndpoint/"/>
+    </wsdl2:service>    
+</wsdl2:description>
